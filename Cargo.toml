@@ -10,6 +10,7 @@ members = [".", "api", "service", "entity", "migration"]
 actix-web = "4.3.1"
 shuttle-actix-web = "0.35.0"
 shuttle-runtime = "0.35.0"
+shuttle-secrets = "0.35.1"
 
 sea-orm = { version = "0.12", features = ["runtime-tokio-rustls", "sqlx-mysql"] }
 
