@@ -15,8 +15,6 @@ If you wish to self-host a Quotr bot, you will need to link it to your own insta
 2. The second reason I'm using SeaORM is that it supports migrations, Async operations, sub-queries, and tests. Things that could be useful for features I have in mind.
 
 ### [Shuttle](https://www.shuttle.rs/)
-1. This is a choice made with heavy consideration of the free tier. After all, I don't want to be bleeding money for a learning project, but also because it seems to be a convenient way to host the API. I'm putting this here since it requires some level of code integration. Should the bot make revenue at all, or even enough to sustain a standalone Nginx server, I will consider migrating to that.
-
-### Some form of JWT library
+1. This is a choice made with heavy consideration of the free tier. After all, I don't want to be bleeding money for a learning project, but also because it seems to be a convenient way to host the API. I'm putting this here since it requires some level of code integration.
 
 ## Set-up
