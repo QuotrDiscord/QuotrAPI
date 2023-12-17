@@ -1,13 +1,25 @@
-use actix_web::{get, web::ServiceConfig};
+use actix_cors::Cors;
+use actix_web::{
+    get,
+    web::{self, ServiceConfig},
+};
+use auth_routes::JwtSecret;
+
+mod auth_routes;
 
 #[get("/")]
 async fn hello_world() -> &'static str {
     "Hello World!"
 }
 
-pub fn main() -> impl for<'a> Fn(&'a mut ServiceConfig) + Send + Clone {
+pub fn main(jwt_secret: String) -> impl for<'a> FnOnce(&'a mut ServiceConfig) + Send + Clone {
     let config = move |cfg: &mut ServiceConfig| {
-        cfg.service(hello_world);
+        cfg.service(
+            web::scope("/")
+                .app_data(web::Data::new(JwtSecret { secret: jwt_secret }))
+                .service(hello_world)
+                .service(auth_routes::login),
+        );
     };
 
     config
