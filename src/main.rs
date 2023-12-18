@@ -14,11 +14,31 @@ async fn main(
         .get("DB_URL")
         .expect("Could not find required secret DB_URL");
 
+    let discord_endpoint = secret_store
+        .get("DISCORD_ENDPOINT")
+        .expect("Could not find required secret DISCORD_ENDPOINT");
+    let client_id = secret_store
+        .get("CLIENT_ID")
+        .expect("Could not find required secret CLIENT_ID");
+    let client_secret = secret_store
+        .get("CLIENT_SECRET")
+        .expect("Could not find required secret CLIENT_SECRET");
+    let redirect_uri = secret_store
+        .get("OAUTH_REDIRECT")
+        .expect("Could not find required secret OAUTH_REDIRECT");
+
     execute_migrations(&db_url)
         .await
         .expect("Failed to execute migrations");
 
-    Ok(api::main(jwt_secret).into())
+    Ok(api::main(
+        jwt_secret,
+        discord_endpoint,
+        client_id,
+        client_secret,
+        redirect_uri,
+    )
+    .into())
 }
 
 async fn execute_migrations(database: &str) -> Result<(), migration::DbErr> {
