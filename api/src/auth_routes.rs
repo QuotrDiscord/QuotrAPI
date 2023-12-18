@@ -1,4 +1,4 @@
-use actix_web::{cookie::Cookie, get, web, HttpResponse, Responder};
+use actix_web::{cookie::Cookie, cookie::SameSite, get, web, HttpResponse, Responder};
 use jsonwebtoken::{encode, EncodingKey, Header};
 use serde::{Deserialize, Serialize};
 use std::ops::Add;
@@ -39,7 +39,9 @@ pub async fn login(path: web::Path<String>, jwt_secret: web::Data<JwtSecret>) ->
 
     let cookie = Cookie::build("auth_token", token)
         .domain("localhost")
+        .secure(true)
         .http_only(true)
+        .same_site(SameSite::Strict)
         .finish();
 
     HttpResponse::Ok().cookie(cookie).await

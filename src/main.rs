@@ -7,6 +7,9 @@ use shuttle_secrets::SecretStore;
 async fn main(
     #[shuttle_secrets::Secrets] secret_store: SecretStore,
 ) -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
+    let jwt_secret = secret_store
+        .get("JWT_SECRET")
+        .expect("Could not find required secret JWT_SECRET");
     let db_url = secret_store
         .get("DB_URL")
         .expect("Could not find required secret DB_URL");
@@ -15,7 +18,7 @@ async fn main(
         .await
         .expect("Failed to execute migrations");
 
-    Ok(api::main().into())
+    Ok(api::main(jwt_secret).into())
 }
 
 async fn execute_migrations(database: &str) -> Result<(), migration::DbErr> {

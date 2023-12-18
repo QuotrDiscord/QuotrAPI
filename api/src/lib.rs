@@ -14,12 +14,13 @@ async fn hello_world() -> &'static str {
 
 pub fn main(jwt_secret: String) -> impl for<'a> FnOnce(&'a mut ServiceConfig) + Send + Clone {
     let config = move |cfg: &mut ServiceConfig| {
-        cfg.service(
-            web::scope("/")
-                .app_data(web::Data::new(JwtSecret { secret: jwt_secret }))
-                .service(hello_world)
-                .service(auth_routes::login),
-        );
+        cfg.app_data(web::Data::new(JwtSecret { secret: jwt_secret }))
+            .service(
+                web::scope("/api")
+                    .service(hello_world)
+                    .service(auth_routes::login)
+                    .wrap(Cors::permissive()),
+            );
     };
 
     config
