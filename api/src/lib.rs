@@ -1,16 +1,9 @@
 use actix_cors::Cors;
-use actix_web::{
-    get,
-    web::{self, ServiceConfig},
-};
-use auth_routes::{DiscordApiCaller, JwtSecret};
+use actix_web::web::{self, ServiceConfig};
+use discord_helpers::{DiscordApiCaller, JwtSecret};
 
-mod auth_routes;
-
-#[get("/")]
-async fn hello_world() -> &'static str {
-    "Hello World!"
-}
+mod discord_helpers;
+mod routes;
 
 pub fn main(
     jwt_secret: String,
@@ -27,10 +20,10 @@ pub fn main(
                 client_secret: client_secret,
                 redirect_uri: redirect_uri,
             }))
-            .service(hello_world)
+            .service(routes::other::hello_world)
             .service(
                 web::scope("/api")
-                    .service(auth_routes::login)
+                    .service(routes::auth::login)
                     .wrap(Cors::permissive()),
             );
     };
