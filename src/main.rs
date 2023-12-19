@@ -23,9 +23,12 @@ async fn main(
     let client_secret = secret_store
         .get("CLIENT_SECRET")
         .expect("Could not find required secret CLIENT_SECRET");
-    let domain = secret_store
-        .get("DOMAIN")
-        .expect("Could not find required secret DOMAIN");
+    let redirect_uri = secret_store
+        .get("DISCORD_REDIRECT_URI")
+        .expect("Could not find required secret DISCORD_REDIRECT_URI");
+    let web_domain = secret_store
+        .get("WEB_DOMAIN")
+        .expect("Could not find required secret WEB_DOMAIN");
 
     execute_migrations(&db_url)
         .await
@@ -36,7 +39,8 @@ async fn main(
         discord_endpoint,
         client_id,
         client_secret,
-        domain,
+        redirect_uri,
+        web_domain,
     )
     .into())
 }

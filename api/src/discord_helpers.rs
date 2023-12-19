@@ -29,7 +29,7 @@ pub struct DiscordApiCaller {
     pub api_endpoint: String,
     pub client_id: String,
     pub client_secret: String,
-    pub domain: String,
+    pub redirect_uri: String,
 }
 
 pub async fn fetch_discord_access_token(
@@ -38,7 +38,7 @@ pub async fn fetch_discord_access_token(
 ) -> Option<AccessTokenResponse> {
     let client: Client = Client::new();
     let mut form_data = HashMap::new();
-    let redirect_uri = &*format!("{}/login", &*caller_data.domain);
+    let redirect_uri = &*caller_data.redirect_uri;
 
     form_data.insert("grant_type", "authorization_code");
     form_data.insert("code", &*oauth_code);
