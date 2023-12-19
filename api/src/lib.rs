@@ -10,7 +10,7 @@ pub fn main(
     discord_endpoint: String,
     client_id: String,
     client_secret: String,
-    redirect_uri: String,
+    domain: String,
 ) -> impl for<'a> FnOnce(&'a mut ServiceConfig) + Send + Clone {
     let config = move |cfg: &mut ServiceConfig| {
         cfg.app_data(web::Data::new(JwtSecret { secret: jwt_secret }))
@@ -18,7 +18,7 @@ pub fn main(
                 api_endpoint: discord_endpoint,
                 client_id: client_id,
                 client_secret: client_secret,
-                redirect_uri: redirect_uri,
+                domain: domain,
             }))
             .service(routes::other::hello_world)
             .service(

@@ -15,17 +15,18 @@ pub async fn login(
         api_endpoint: discord_caller_data.api_endpoint.clone(),
         client_id: discord_caller_data.client_id.clone(),
         client_secret: discord_caller_data.client_secret.clone(),
-        redirect_uri: discord_caller_data.redirect_uri.clone(),
+        domain: discord_caller_data.domain.clone(),
     };
 
     let token_response: Option<AccessTokenResponse> =
-        discord_helpers::fetch_discord_access_token(cloned_discord_caller_data, discord_code).await;
+        discord_helpers::fetch_discord_access_token(&cloned_discord_caller_data, discord_code)
+            .await;
 
     if let Some(successful_response) = token_response {
         let token = discord_helpers::generate_jwt(successful_response.access_token, jwt_bytes);
 
         let cookie = Cookie::build("auth_token", token)
-            .domain("localhost")
+            .domain(cloned_discord_caller_data.domain)
             .secure(true)
             .http_only(true)
             .same_site(SameSite::Strict)
