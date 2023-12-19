@@ -31,7 +31,7 @@ pub async fn login(
             .domain(&*web_domain.domain)
             .secure(true)
             .http_only(true)
-            .same_site(SameSite::Strict)
+            .same_site(SameSite::None)
             .finish();
 
         HttpResponse::Ok().cookie(cookie).await
